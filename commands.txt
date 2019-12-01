@@ -1,0 +1,10 @@
+#SELECTS
+
+db.players.find().pretty()
+
+db.people.find(
+    { players: {} }
+)
+
+#UPDATES
+
