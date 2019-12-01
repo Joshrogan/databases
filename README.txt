@@ -7,5 +7,5 @@
 
 4. enter mongo and type:
     use fpl
-    db.players.find().pretty()
+    db.players.find().pretty() // or commands in commands.txt
 
