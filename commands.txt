@@ -1,10 +1,91 @@
-#SELECTS
+##SELECTS
+
+
+#find all players/teams:
 
 db.players.find().pretty()
 
-db.people.find(
-    { players: {} }
-)
+
+#find players from one team:
+
+db.players.aggregate( [{ $match : {team : "BUR" } } ] ).pretty()
+
+
+#players with the surname King:
+
+db.players.aggregate( 
+    {$match: { 
+        "player.name": "King" 
+    }}, 
+    { $unwind : "$player" }, 
+    { $match : { 
+        "player.name": "King" 
+    }}
+).pretty()
+
+
+#players with over 100 points:
+
+db.players.aggregate(
+    {$match: {
+        "player.total_points": {$gt: 100} 
+    }}, 
+    { $unwind : "$player" }, 
+    { $match : { 
+        "player.total_points": {$gt: 100} 
+    }} 
+).pretty()
+
+#players not available for selection and play for arsenal:
+
+db.players.aggregate(
+    {$match: { 
+        "player.status": "NotAvail", 
+        "team": "ARS" 
+    }}, 
+    { $unwind : "$player" }, 
+    { $match : { 
+        "player.status": "NotAvail", 
+        "team": "ARS"
+    }} 
+).pretty()
+
+
+#total players playing for each team:
+
+db.players.aggregate( 
+    { 
+        $group: { 
+            _id: "$team", 
+            total: { $sum: {$size: "$player"}}
+        }
+    }
+).pretty()
+
 
 #UPDATES
+
+# updates embedded array score of player where name = dendoncker 
+
+db.players.update(
+    {"player.name":"Dendoncker"}, 
+    {$set: {'player.$.total_points':150}}
+);
+
+
+# adds two players to spurs called Rogan & Josh:
+
+db.players.update(
+    {team:"WOL"}, 
+    {$push: 
+        { player: 
+            { $each: [ 
+                {name: "Rogan"}, 
+                {name:"Josh"}
+                ], 
+                $slice: 2 
+            } 
+        } 
+    } 
+)
 
