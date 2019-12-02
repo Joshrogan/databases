@@ -9,3 +9,6 @@
     use fpl
     db.players.find().pretty() // or commands in commands.txt
 
+5. design_doc.txt contains the choices between two different schema designs
+and the reason for my choice
+

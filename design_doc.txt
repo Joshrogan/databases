@@ -1,0 +1,79 @@
+Example of CSV:
+name,team,position,cost,status,minutes,total_points,bonus,points_per_game,selected_by_percent
+Mustafi,ARS,DEF,5.2,Doubtful,34,1,0,1.0,0.3
+Bellerín,ARS,DEF,5.4,Doubtful,172,1,0,0.5,0.4
+Kolasinac,ARS,DEF,5.3,Available,701,20,1,1.8,0.7
+Maitland-Niles,ARS,DEF,4.7,Available,490,17,3,2.8,2.9
+Sokratis,ARS,DEF,5.0,Available,1080,31,2,2.6,1.8
+....
+
+Design Choice 1:
+Was to have all 530+ players listed individually with there teams similar to the current CSV,
+so something like this:
+		{
+		"name": "Mustafi",
+		"team": "ARS",
+                "position": "DEF",
+                "cost": 5.2,
+                "status": "Doubtful",
+                "minutes": 34.0,
+                "total_points": 1,
+                "bonus": 0,
+                "points_per_game": 1.0,
+                "selected_by_percent": 0.3
+		},
+		{
+		"name": "Bellerín",
+		"team": "ARS",
+                "position": "DEF",
+                "cost": 5.4,
+                "status": "Doubtful",
+                "minutes": 172.0,
+                "total_points": 1,
+                "bonus": 0,
+                "points_per_game": 0.5,
+                "selected_by_percent": 0.4
+		},
+		....
+
+
+Design Choice 2:
+The second choice was to group them by teams and have an embedded player array of the players who play for each team, this leaves us with 20 top level objects and makes more sense than just having every player as there own individual entry for our mongoDB database:
+
+    {
+        "team": "ARS",
+        "player": [
+            {
+                "name": "Mustafi",
+                "position": "DEF",
+                "cost": 5.2,
+                "status": "Doubtful",
+                "minutes": 34.0,
+                "total_points": 1,
+                "bonus": 0,
+                "points_per_game": 1.0,
+                "selected_by_percent": 0.3
+            },
+            {
+                "name": "Bellerín",
+                "position": "DEF",
+                "cost": 5.4,
+                "status": "Doubtful",
+                "minutes": 172.0,
+                "total_points": 1,
+                "bonus": 0,
+		"points_per_game": 0.5,
+                "selected_by_percent": 0.4
+		},
+		...
+    },
+    {
+	"team": "BUR",
+	"player": [
+		....
+
+    }
+
+
+
+
